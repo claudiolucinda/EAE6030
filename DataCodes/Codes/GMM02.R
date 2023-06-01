@@ -12,6 +12,8 @@ library(gmm)
 library(tidyverse)
 library(haven)
 
+rm(list=ls())
+
 patents_df <- read_dta("./Data/patents.dta")
 # explore
 glimpse(patents_df)
@@ -72,7 +74,7 @@ gmm_lm_iid_2 <- gmm(
   rnorm(length(coef(lm_res))),
   data = df_n,
   wmatrix = "optimal",
-  vcov = "iid",
+  vcov = "MDS",
   optfct = "nlminb",
   control = list(eval.max = 10000)
 )

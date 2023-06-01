@@ -30,7 +30,18 @@ g1 <- function(tet, x) {
   f <- cbind(m1, m2, m3)
   return(f)
 }
+
+# GMM (over identified)
+g3 <- function(tet, x) {
+  m1 <- (tet[1] - x)
+  m2 <- x^3 - tet[1] * (tet[1]^2 + 3 * tet[2]^2)
+  f <- cbind(m1, m2)
+  return(f)
+}
+
 print(res0 <- gmm(g0, x, c(mu = 0, sig = 0)))
 print(res1 <- gmm(g1, x, c(mu = 0, sig = 0)))
+print(res2 <- gmm(g3, x, c(mu = 0, sig = 0)))
 
 summary(res0)
+summary(res1)
