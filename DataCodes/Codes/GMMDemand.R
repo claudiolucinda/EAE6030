@@ -26,6 +26,8 @@ library("AER")
 library("gmm")
 library("plot.matrix")
 
+rm(list=ls())
+
 dat<-sasxport.get("./Data/NevoData_OI.xpt")
 
 dat<-dat %>%
@@ -84,7 +86,7 @@ model_3_gmm <- gmm(meanu~price+sugar+mushy, # linear regression formula
                    rnorm(length(coef(model_3))),
                    type="twoStep",
                    data = data03,
-                   wmatrix = "ident",
+                   wmatrix = "optimal",
                    vcov = "MDS",
                    optfct = "optim",
                    control = list(eval.max = 10000))

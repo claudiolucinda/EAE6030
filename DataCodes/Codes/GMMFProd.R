@@ -27,7 +27,7 @@ model01<-plm(lnva~lnk+lnb+lnw, data=data, model="pooling", index=c("plantid","ye
 summary(model01)
 
 # Modelo anterior, com clustered SE por plantid -- igual ao Stata
-# Dá uma baixada boa nos Erros Padrão
+# Dá uma aumentada boa nos Erros Padrão
 # E tá igual ao Stata
 coeftest(model01,vcov=vcovHC(model01, type="sss", cluster="group"))
 
@@ -36,6 +36,7 @@ coeftest(model01,vcov=vcovHC(model01, type="sss", cluster="group"))
 # Pergunta ao leitor. O que quer dizer a constante nos FE no Stata?
 
 model02<-plm(lnva~lnk+lnb+lnw, data=data, model="within", index=c("plantid","year"))
+summary(model02)
 coeftest(model02,vcov=vcovHC(model02, type="sss", cluster="group"))
 
 # Colocando FE de ano
@@ -78,14 +79,15 @@ source("./Codes/comfactest.R")
 # Arellano-Bond
 
 m1<-pgmm(lnva~lag(lnva,1)+lag(lnk,0:1)+lag(lnw,0:1)+lag(lnb,0:1) | 
-           lag(lnva,2:99) + lag(lnw,2:99) +lag(lnb, 2:99), data = data, index=c("plantid","year"),
+           lag(lnva,2:99) + lag(lnw,2:99) +lag(lnb, 2:99)+lag(lnk, 2:99), 
+         data = data, index=c("plantid","year"),
          effects="twoways", fsm = "G")
 summary(m1, robust=TRUE)
 comfactest(m1)
 
 # Blundell-Bond
 m2<-pgmm(lnva~lag(lnva,1)+lag(lnk,0:1)+lag(lnw,0:1)+lag(lnb,0:1) | 
-           lag(lnva,2:99) + lag(lnw,2:99) +lag(lnb, 2:99), data = data, index=c("plantid","year"),
+           lag(lnva,2:99) + lag(lnw,2:99) +lag(lnb, 2:99)+lag(lnk, 2:99), data = data, index=c("plantid","year"),
          effects="twoways", fsm = "G", transformation = "ld")
 summary(m2, robust=TRUE)
 comfactest(m2, k=15)
